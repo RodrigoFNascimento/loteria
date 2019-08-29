@@ -11,15 +11,37 @@ class Person {
 
     public String name;
     public int[] numbers;
+    public int score;
 
     public Person(String name) {
 
         this.name = name;
         this.numbers = new int[15];
+        this.score = 0;
     } 
 }
 
 public class rodrigonascimento_201600155174_loteria {
+
+    private static int NUM_OF_WINNING_NUMBERS = 10;
+    private static int NUM_OF_BET_NUMBERS = 15;
+
+    /**
+     * Generates a person's score
+     * 
+     * @param person            Person whose score will be generated.
+     * @param winningNumbers    Numbers that won the lottery.
+     */
+    private static void generateScore(Person person, int[] winningNumbers) {
+
+        for (int i = 0; i < NUM_OF_BET_NUMBERS; i++) {
+            for (int j = 0; j < NUM_OF_WINNING_NUMBERS; j++) {
+
+                if (person.numbers[i] == winningNumbers[j])
+                    person.score++;
+            }
+        }
+    }
 
     /**
      * Makes a person out of a String.
@@ -61,21 +83,24 @@ public class rodrigonascimento_201600155174_loteria {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
     
             int prize;
-            int numOfBets;
-            int[] winningNumbers = new int[10];
+            int numOfGamblers;
+            int[] winningNumbers = new int[NUM_OF_WINNING_NUMBERS];
 
             // Reads the input
             prize = Integer.parseInt( reader.readLine() );
-            numOfBets = Integer.parseInt(reader.readLine());
+            numOfGamblers = Integer.parseInt(reader.readLine());
             String[] temp = reader.readLine().split(" ");
-            
-            for (int i = 0; i < 10; i++)
+
+            for (int i = 0; i < NUM_OF_WINNING_NUMBERS; i++)
                 winningNumbers[i] = Integer.parseInt(temp[i]);
 
-            Person[] betters = new Person[numOfBets];
+            Person[] gamblers = new Person[numOfGamblers];
 
-            for (int i = 0; i < numOfBets; i++)
-                betters[i] = makePerson(reader.readLine());
+            for (int i = 0; i < numOfGamblers; i++)
+                gamblers[i] = makePerson(reader.readLine());
+
+            for (int i = 0; i < numOfGamblers; i++)
+                generateScore(gamblers[i], winningNumbers);
     
         } catch (Exception ex) {
             ex.printStackTrace();
