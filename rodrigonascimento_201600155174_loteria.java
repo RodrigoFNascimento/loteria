@@ -59,6 +59,73 @@ public class rodrigonascimento_201600155174_loteria {
     }
 
     /**
+     * Gets the index of the left child of a heap tree.
+     * 
+     * @param index Index of the root node.
+     * @return      Index of the left child.
+     */
+    private static int getLeft(int index) {
+        return 2 * index + 1;
+    }
+
+    /**
+     * Gets the index of the right child of a heap tree.
+     * 
+     * @param index Index of the root node.
+     * @return      Index of the right child.
+     */
+    private static int getRight(int index) {
+        return 2 * index + 2;
+    }
+
+    /**
+     * Gets last root of the tree.
+     * 
+     * @param size  Number of elements in the tree.
+     * @return      Index of the last root.
+     */
+    private static int getLastRoot(int size) {
+        return ((size - 1) - 1) / 2;
+    }
+
+    /**
+     * Swaps two elements of an array.
+     * 
+     * @param array         Array to have it's elements swaped.
+     * @param firstIndex    First index to be swaped.
+     * @param secondInex    Second index to be swaped.
+     */
+    private static void swap(Person[] array, int firstIndex, int secondInex) {
+
+        Person aux = array[firstIndex];
+        array[firstIndex] = array[secondInex];
+        array[secondInex] = aux;
+    }
+
+    /**
+     * Turns a binary tree into a heap.
+     * 
+     * @param array Tree to be heapfied.
+     * @param index Target index.
+     */
+    private static Person[] heapify(Person[] array, int index) {
+
+        int root = index;
+        int left = getLeft(index);
+        int right = getRight(index);
+        if (left < array.length && array[left].score > array[index].score)
+            root = left;
+        if (right < array.length && array[right].score > array[index].score)
+            root = right;
+        if (root != index) {
+            swap(array, root, index);
+            array = heapify(array, root);
+        }
+
+        return array;
+    }
+
+    /**
      * Writes content to file.
      * 
      * @param fileName  Name of the file (with extension) to be writen.
@@ -101,6 +168,11 @@ public class rodrigonascimento_201600155174_loteria {
 
             for (int i = 0; i < numOfGamblers; i++)
                 generateScore(gamblers[i], winningNumbers);
+
+            int lastRootIndex = getLastRoot(gamblers.length);
+
+            for (int i = lastRootIndex; i >= 0; i--)
+                gamblers = heapify(gamblers, i);
     
         } catch (Exception ex) {
             ex.printStackTrace();
