@@ -156,11 +156,13 @@ public class rodrigonascimento_201600155174_loteria {
      * @param gamblers      List of all the gamblers.
      * @param rootIndex     Root of the subtree to be searched.
      * @param winnersNames  Names of all the winners.
+     * @return              Number of winners.
      */
-    private static void getWinners(Person[] gamblers, int rootIndex, StringBuilder winnersNames) {
+    private static int getWinners(Person[] gamblers, int rootIndex, StringBuilder winnersNames) {
 
         int left = getLeft(rootIndex);
         int right = getRight(rootIndex);
+        int numberOfWinners = 1;
 
         if (winnersNames.length() > 0)
             winnersNames.append('\n' + gamblers[rootIndex].name);
@@ -169,9 +171,35 @@ public class rodrigonascimento_201600155174_loteria {
 
         // Recurs down the tree
         if (left < gamblers.length && gamblers[rootIndex].score == gamblers[left].score)
-            getWinners(gamblers, left, winnersNames);
+            numberOfWinners += getWinners(gamblers, left, winnersNames);
         if (right < gamblers.length && gamblers[rootIndex].score == gamblers[right].score)
-            getWinners(gamblers, right, winnersNames);
+            numberOfWinners += getWinners(gamblers, right, winnersNames);
+
+        return numberOfWinners;
+    }
+
+    /**
+     * Splits the prize among the winners.
+     * 
+     * @param prize         Original prize.
+     * @param topWinners    Number of gamblers who got the greatest score.
+     * @param bottomWinners Number of gamblers who got the lowest score.
+     * @return              The top winners prize at index 0 and the bottom winners prize at index 1.
+     */
+    private static int[] splitPrize(int prize, int topWinners, int bottomWinners) {
+
+        int[] finalPrizes = new int[2];
+
+        if (topWinners > 0 && bottomWinners > 0)
+            prize /= 2;
+        
+        if (topWinners > 0)
+            finalPrizes[0] = prize / topWinners;
+
+        if (bottomWinners > 0)
+            finalPrizes[1] = prize / bottomWinners;
+
+        return finalPrizes;
     }
 
     /**
@@ -215,6 +243,7 @@ public class rodrigonascimento_201600155174_loteria {
             for (int i = 0; i < numOfGamblers; i++)
                 gamblers[i] = makePerson(reader.readLine());
 
+            // Generates the scores
             for (int i = 0; i < numOfGamblers; i++)
                 generateScore(gamblers[i], winningNumbers);
 
@@ -224,17 +253,22 @@ public class rodrigonascimento_201600155174_loteria {
             for (int i = lastRootIndex; i >= 0; i--)
                 gamblers = heapifyMax(gamblers, i);
 
-            // Gets the names of the winners with the greatest score
+            // Gets the winners with the greatest score
             StringBuilder topWinnersNames = new StringBuilder();
-            getWinners(gamblers, 0, topWinnersNames);
+            int numOfTopWinners = getWinners(gamblers, 0, topWinnersNames);
+            int topScore = gamblers[0].score;
 
             // Turns the array into a min heap
             for (int i = lastRootIndex; i >= 0; i--)
                 gamblers = heapifyMin(gamblers, i);
 
-            // Gets the names of the winners with the smallest score
+            // Gets the winners with the smallest score
             StringBuilder bottomWinnersNames = new StringBuilder();
-            getWinners(gamblers, 0, bottomWinnersNames);
+            int numOfBottomWinners = getWinners(gamblers, 0, bottomWinnersNames);
+            int bottomScore = gamblers[1].score;
+
+            // Splits the prize among the winners
+            int[] finalPrizes = splitPrize(prize, numOfTopWinners, numOfBottomWinners);
     
         } catch (Exception ex) {
             ex.printStackTrace();
