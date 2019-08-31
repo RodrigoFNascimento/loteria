@@ -9,7 +9,7 @@
             "name": "loteria",
             "request": "launch",
             "mainClass": "rodrigonascimento_201600155174_loteria",
-            "args": ["loteria.input", "loteira.output"]
+            "args": ["loteria.input", "loteria.output"]
         }
     ]
 }
