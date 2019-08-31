@@ -265,10 +265,14 @@ public class rodrigonascimento_201600155174_loteria {
             // Gets the winners with the smallest score
             StringBuilder bottomWinnersNames = new StringBuilder();
             int numOfBottomWinners = getWinners(gamblers, 0, bottomWinnersNames);
-            int bottomScore = gamblers[1].score;
+            int bottomScore = gamblers[0].score;
 
             // Splits the prize among the winners
             int[] finalPrizes = splitPrize(prize, numOfTopWinners, numOfBottomWinners);
+
+            // Prints the result
+            writeToFile(args[1], "[" + numOfTopWinners + ":" + topScore + ":" + finalPrizes[0] + "]\n" + topWinnersNames + "\n");
+            writeToFile(args[1], "[" + numOfBottomWinners + ":" + bottomScore + ":" + finalPrizes[1] + "]\n" + bottomWinnersNames);
     
         } catch (Exception ex) {
             ex.printStackTrace();
