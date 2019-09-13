@@ -169,10 +169,6 @@ public class rodrigonascimento_201600155174_loteria {
         int right = getRight(rootIndex);
         int numberOfWinners = 1;
 
-        /*int p = 9;
-        if (gamblers[rootIndex].name.compareTo("7129855BB1FD20D9FEDE3F0C32FD0D03") == 0)
-        p = 9;*/
-
         if (winnersNames.length() > 0)
             winnersNames.append('\n' + gamblers[rootIndex].name);
         else
