@@ -37,8 +37,13 @@ public class rodrigonascimento_201600155174_loteria {
         for (int i = 0; i < NUM_OF_BET_NUMBERS; i++) {
             for (int j = 0; j < NUM_OF_WINNING_NUMBERS; j++) {
 
-                if (person.numbers[i] == winningNumbers[j])
+                if (person.numbers[i] == winningNumbers[j]) {
                     person.score++;
+                    break;
+                }
+
+                if (person.numbers[i] < winningNumbers[j])
+                    break;
             }
         }
     }
@@ -163,6 +168,10 @@ public class rodrigonascimento_201600155174_loteria {
         int left = getLeft(rootIndex);
         int right = getRight(rootIndex);
         int numberOfWinners = 1;
+
+        /*int p = 9;
+        if (gamblers[rootIndex].name.compareTo("7129855BB1FD20D9FEDE3F0C32FD0D03") == 0)
+        p = 9;*/
 
         if (winnersNames.length() > 0)
             winnersNames.append('\n' + gamblers[rootIndex].name);
